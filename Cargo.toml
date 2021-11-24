@@ -16,6 +16,7 @@ lazy_static = "1.4.0"
 nalgebra-glm = "0.15.0"
 wee_alloc = "0.4.5"
 
+
 [dependencies.web-sys]
 version = "0.3.53"
 features = [

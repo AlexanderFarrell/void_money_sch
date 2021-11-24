@@ -5,3 +5,4 @@ pub mod visual;
 pub mod audio;
 pub mod input;
 pub mod world;
+pub mod data;

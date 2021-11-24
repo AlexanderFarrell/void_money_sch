@@ -1,3 +1,4 @@
+use js_sys::Number;
 use wasm_bindgen::closure::Closure;
 use wasm_bindgen::{JsCast, JsValue};
 use web_sys::{Element, WebGlRenderingContext};
@@ -13,11 +14,19 @@ use crate::wasm_bindgen;
 
 mod visual;
 mod ui;
+mod time;
 
 #[wasm_bindgen]
 extern "C" {
     #[wasm_bindgen(js_namespace = console)]
     pub fn log(s: &str);
+
+    #[wasm_bindgen(js_namespace = Date)]
+    fn now() -> Number;
+}
+
+pub fn date_now() -> u64 {
+    return now().as_f64().unwrap().round() as u64;
 }
 
 pub struct WebGLEngine {
@@ -30,10 +39,11 @@ impl WebGLEngine {
     pub fn new() -> Self {
         console_error_panic_hook::set_once();
         log("Initialized");
+        log(format!("{}", date_now()).as_str());
         Self {
             is_running: false,
             visual: WebGLVisual::new().unwrap(),
-            world: World {}
+            world: World::new()
         }
     }
 }

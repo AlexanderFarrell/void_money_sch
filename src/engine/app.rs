@@ -1,5 +1,6 @@
 use std::cell::RefCell;
 use std::fmt::{Display, Formatter};
+use std::ops::DerefMut;
 use std::rc::Rc;
 use wasm_bindgen::prelude::Closure;
 use crate::engine::engine::Engine;
@@ -25,9 +26,9 @@ pub trait CoreComponent {
 }
 
 pub trait Game {
-    fn setup(&mut self);
-    fn update(&mut self);
-    fn breakdown(&mut self);
+    fn setup(&mut self, engine: &mut dyn Engine);
+    fn update(&mut self, engine: &mut dyn Engine);
+    fn breakdown(&mut self, engine: &mut dyn Engine);
     fn name(&self) -> String;
     fn version(&self) -> Version;
 }
@@ -37,7 +38,7 @@ pub struct App<G: 'static + Game, E: 'static + Engine> {
     engine: Rc<RefCell<E>>,
 }
 
-impl<G: Game, E: Engine> App<G, E> {
+impl<G: 'static + Game, E: 'static + Engine> App<G, E> {
     pub fn new(game: G, engine: E) -> Self {
         App {
             game: Rc::new(RefCell::new(game)),
@@ -47,24 +48,27 @@ impl<G: Game, E: Engine> App<G, E> {
 
     pub fn start(&mut self) {
         self.engine.borrow_mut().setup();
-        self.game.borrow_mut().setup();
+        {
+            let mut i = self.engine.borrow_mut();
+            self.game.borrow_mut().setup(i.deref_mut());
+        }
         self.run();
     }
 
     pub fn end(&mut self) {
         //self.engine.stop();
-        self.game.borrow_mut().breakdown();
-        self.engine.borrow_mut().breakdown();
+        //self.game.borrow_mut().breakdown();
+        //self.engine.borrow_mut().breakdown();
     }
 
-    fn run(&mut self) {
+    fn run(&self) {
         let mut game = self.game.clone();
         let mut e = self.engine.clone();
         let anim_frame = Rc::new(self.engine.borrow_mut().game_iter());
         let anim_frame_outer = anim_frame.clone();
 
         let inner_data_ref = Rc::new(RefCell::new(None));
-        let outer_data_ref = inner_data_ref.clone();
+        let outer_data_ref  = inner_data_ref.clone();
 
         *outer_data_ref.borrow_mut() = Some(Closure::wrap(Box::new(move || {
             let running: bool = e.clone().borrow_mut().running();
@@ -73,13 +77,19 @@ impl<G: Game, E: Engine> App<G, E> {
                 let _ = inner_data_ref.borrow_mut().take();
 
                 e.clone().borrow_mut().stop();
-                game.clone().borrow_mut().breakdown();
+                {
+                    let mut ee = e.borrow_mut();
+                    game.clone().borrow_mut().breakdown(&mut *ee);
+                }
                 e.clone().borrow_mut().breakdown();
 
                 return;
             }
 
-            game.clone().borrow_mut().update();
+            {
+                let mut ee = e.borrow_mut();
+                game.clone().borrow_mut().update(&mut *ee);
+            }
             e.clone().borrow_mut().update();
             e.clone().borrow_mut().draw();
 
