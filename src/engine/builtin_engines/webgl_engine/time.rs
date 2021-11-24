@@ -1,4 +1,134 @@
+use std::fmt::Display;
 use crate::engine::builtin_engines::webgl_engine;
+use crate::wasm_bindgen::__rt::core::fmt::Formatter;
+
+#[derive(Copy, Clone)]
+pub enum Month {
+    January = 1,
+    February = 2,
+    March = 3,
+    April = 4,
+    May = 5,
+    June = 6,
+    July = 7,
+    August = 8,
+    September = 9,
+    October = 10,
+    November = 11,
+    December = 12,
+}
+
+impl From<u64> for Month {
+    fn from(i: u64) -> Self {
+        match i {
+             1 => Month::January,
+             2 => Month::February,
+             3 => Month::March,
+             4 => Month::April,
+             5 => Month::May,
+             6 => Month::June,
+             7 => Month::July,
+             8 => Month::August,
+             9 => Month::September,
+             10 => Month::October,
+             11 => Month::November,
+             12 => Month::December,
+            _ => panic!("Invalid Month: {}. Must be 1-12.", i)
+        }
+    }
+}
+
+impl Into<u64> for Month {
+    fn into(self) -> u64 {
+        match self {
+            Month::January => 1,
+            Month::February => 2,
+            Month::March => 3,
+            Month::April => 4,
+            Month::May => 5,
+            Month::June => 6,
+            Month::July => 7,
+            Month::August => 8,
+            Month::September => 9,
+            Month::October => 10,
+            Month::November => 11,
+            Month::December => 12,
+        }
+    }
+}
+
+impl Display for Month {
+    fn fmt(&self, f: &mut Formatter<'_>) -> core::fmt::Result {
+        match self {
+            Month::January => write!(f, "{}", "January"),
+            Month::February => write!(f, "{}", "Feburary"),
+            Month::March => write!(f, "{}", "March"),
+            Month::April => write!(f, "{}", "April"),
+            Month::May => write!(f, "{}", "May"),
+            Month::June => write!(f, "{}", "June"),
+            Month::July => write!(f, "{}", "July"),
+            Month::August => write!(f, "{}", "August"),
+            Month::September => write!(f, "{}", "September"),
+            Month::October => write!(f, "{}", "October"),
+            Month::November => write!(f, "{}", "November"),
+            Month::December => write!(f, "{}", "December"),
+        }
+    }
+}
+
+#[derive(Copy, Clone)]
+pub enum DaysOfWeek {
+    Monday = 0,
+    Tuesday = 1,
+    Wednesday = 2,
+    Thursday = 3,
+    Friday = 4,
+    Saturday = 5,
+    Sunday = 6
+}
+
+impl From<u64> for DaysOfWeek {
+    fn from(i: u64) -> Self {
+        match i {
+            0 => DaysOfWeek::Monday,
+            1 => DaysOfWeek::Tuesday,
+            2 => DaysOfWeek::Wednesday,
+            3 => DaysOfWeek::Thursday,
+            4 => DaysOfWeek::Friday,
+            5 => DaysOfWeek::Saturday,
+            6 => DaysOfWeek::Sunday,
+            _ => panic!("Invalid value. Cannot convert day {} into a day of the week. Must be between 0 and 6", i)
+        }
+    }
+}
+
+impl Into<u64> for DaysOfWeek {
+    fn into(self) -> u64 {
+        match self {
+            DaysOfWeek::Monday => 0,
+            DaysOfWeek::Tuesday => 1,
+            DaysOfWeek::Wednesday => 2,
+            DaysOfWeek::Thursday => 3,
+            DaysOfWeek::Friday => 4,
+            DaysOfWeek::Saturday => 5,
+            DaysOfWeek::Sunday => 6,
+        }
+    }
+}
+
+impl Display for DaysOfWeek {
+    fn fmt(&self, f: &mut Formatter<'_>) -> core::fmt::Result {
+        match self {
+            DaysOfWeek::Monday => write!(f, "{}", "Monday"),
+            DaysOfWeek::Tuesday => write!(f, "{}", "Tuesday"),
+            DaysOfWeek::Wednesday => write!(f, "{}", "Wednesday"),
+            DaysOfWeek::Thursday => write!(f, "{}", "Thursday"),
+            DaysOfWeek::Friday => write!(f, "{}", "Friday"),
+            DaysOfWeek::Saturday => write!(f, "{}", "Saturday"),
+            DaysOfWeek::Sunday => write!(f, "{}", "Sunday")
+        }
+    }
+}
 
 #[derive(Copy, Clone)]
 pub struct WebDate {
@@ -10,6 +140,30 @@ impl Default for WebDate {
         Self {
             stamp: webgl_engine::date_now()
         }
+    }
+}
+
+impl Display for WebDate {
+    fn fmt(&self, f: &mut Formatter<'_>) -> core::fmt::Result {
+        let day_of_week = DaysOfWeek::from(self.current_day_of_week());
+        let year = self.current_year();
+        let day = self.current_day_of_month();
+        let month = Month::from(self.current_month());
+        write!(f, "{}, {} {}, {}", day_of_week, month, day, year)
+    }
+}
+
+impl From<u64> for WebDate {
+    fn from(i: u64) -> Self {
+        Self {
+            stamp: i
+        }
+    }
+}
+
+impl Into<u64> for WebDate {
+    fn into(self) -> u64 {
+        self.stamp
     }
 }
 
@@ -236,7 +390,7 @@ fn is_leap_year(year: u64) -> bool {
 
 
 mod time_test {
-    use crate::engine::builtin_engines::webgl_engine::time::{current_day_of_month, current_day_of_week, current_hour, current_month, current_year, hours, is_leap_year, milliseconds, minutes, seconds};
+    use crate::engine::builtin_engines::webgl_engine::time::{current_day_of_month, current_day_of_week, current_hour, current_month, current_year, hours, is_leap_year, milliseconds, minutes, seconds, WebDate};
 
     const TESTING_VAL: u64 = 1637736860927;
     //11/23/21 10:54pm or in other words 22:54pm
@@ -294,6 +448,11 @@ mod time_test {
     #[test]
     fn test_day_of_week() {
         assert_eq!(1, current_day_of_week(TESTING_VAL))
+    }
+
+    #[test]
+    fn test_display() {
+        assert_eq!("Tuesday, November 23, 2021", format!("{}", WebDate::from(TESTING_VAL)))
     }
 }
 
