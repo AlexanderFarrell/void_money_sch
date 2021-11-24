@@ -3,6 +3,32 @@ name = "void_money_s"
 version = "0.1.0"
 edition = "2021"
 
+[lib]
+crate-type = ["cdylib", "rlib"]
+
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+wasm-bindgen = "0.2.78"
+console_error_panic_hook = "0.1.7"
+js-sys = "0.3.55"
+lazy_static = "1.4.0"
+nalgebra-glm = "0.15.0"
+wee_alloc = "0.4.5"
+
+[dependencies.web-sys]
+version = "0.3.53"
+features = [
+    'Document',
+    'Element',
+    'EventTarget',
+    'HtmlCanvasElement',
+    'HtmlElement',
+    'MouseEvent',
+    'WebGlBuffer',
+    'WebGlProgram',
+    'WebGlRenderingContext',
+    'WebGlShader',
+    'WebGlUniformLocation',
+    'Window'
+]
