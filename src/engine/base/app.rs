@@ -2,11 +2,15 @@ use std::cell::RefCell;
 use std::fmt::{Display, Formatter};
 use std::ops::DerefMut;
 use std::rc::Rc;
+
 use wasm_bindgen::prelude::Closure;
-use crate::engine::engine::Engine;
+
+use crate::engine::base::engine::Engine;
 use crate::WebGLEngine;
 
 pub type Subversion = (u32, String);
+pub type Source = &'static str;
+
 pub struct Version {
     major: Subversion,
     minor: Subversion,
@@ -42,7 +46,7 @@ impl<G: 'static + Game, E: 'static + Engine> App<G, E> {
     pub fn new(game: G, engine: E) -> Self {
         App {
             game: Rc::new(RefCell::new(game)),
-            engine: Rc::new(RefCell::new(engine))
+            engine: Rc::new(RefCell::new(engine)),
         }
     }
 
@@ -68,7 +72,7 @@ impl<G: 'static + Game, E: 'static + Engine> App<G, E> {
         let anim_frame_outer = anim_frame.clone();
 
         let inner_data_ref = Rc::new(RefCell::new(None));
-        let outer_data_ref  = inner_data_ref.clone();
+        let outer_data_ref = inner_data_ref.clone();
 
         *outer_data_ref.borrow_mut() = Some(Closure::wrap(Box::new(move || {
             let running: bool = e.clone().borrow_mut().running();
@@ -94,7 +98,6 @@ impl<G: 'static + Game, E: 'static + Engine> App<G, E> {
             e.clone().borrow_mut().draw();
 
             anim_frame.clone()(inner_data_ref.borrow().as_ref().unwrap());
-
         }) as Box<dyn FnMut()>));
 
         anim_frame_outer.clone()(outer_data_ref.borrow().as_ref().unwrap());

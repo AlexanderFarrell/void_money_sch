@@ -1,14 +1,16 @@
 use js_sys::Number;
-use wasm_bindgen::closure::Closure;
 use wasm_bindgen::{JsCast, JsValue};
+use wasm_bindgen::closure::Closure;
 use web_sys::{Element, WebGlRenderingContext};
+
 use visual::WebGLVisual;
-use crate::engine::app::{CoreComponent, Version};
-use crate::engine::audio::Audio;
-use crate::engine::engine::Engine;
-use crate::engine::input::Input;
-use crate::engine::visual::{ClearInfo, Visual};
-use crate::engine::world::World;
+
+use crate::engine::base::app::{CoreComponent, Version};
+use crate::engine::base::audio::Audio;
+use crate::engine::base::engine::Engine;
+use crate::engine::base::input::Input;
+use crate::engine::base::visual::Visual;
+use crate::engine::base::world::World;
 use crate::GL;
 use crate::wasm_bindgen;
 
@@ -43,7 +45,7 @@ impl WebGLEngine {
         Self {
             is_running: false,
             visual: WebGLVisual::new().unwrap(),
-            world: World::new()
+            world: World::new(),
         }
     }
 }
@@ -55,16 +57,13 @@ impl Engine for WebGLEngine {
         self.visual.setup();
     }
 
-    fn update(&mut self) {
-
-    }
+    fn update(&mut self) {}
 
     fn draw(&mut self) {
         self.visual.draw(&self.world);
     }
 
-    fn breakdown(&mut self) {
-    }
+    fn breakdown(&mut self) {}
 
     fn name(&self) -> String {
         String::from("WebGL Engine - MorphSight")
@@ -127,7 +126,7 @@ pub fn element_by_id(id: &'static str) -> Option<Element> {
 }
 
 #[inline]
-pub fn request_animation_frame(f: &Closure<dyn FnMut()>){
+pub fn request_animation_frame(f: &Closure<dyn FnMut()>) {
     window()
         .request_animation_frame(f.as_ref().unchecked_ref())
         .expect("Could not request animation frame. ");

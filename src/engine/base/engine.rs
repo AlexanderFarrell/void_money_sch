@@ -1,10 +1,10 @@
 use wasm_bindgen::closure::Closure;
-use crate::engine::app::{CoreComponent, Version};
-use crate::engine::audio::Audio;
-use crate::engine::input::Input;
-use crate::engine::visual::Visual;
-use crate::engine::world::World;
-use crate::wasm_bindgen;
+
+use crate::engine::base::app::Version;
+use crate::engine::base::audio::Audio;
+use crate::engine::base::input::Input;
+use crate::engine::base::visual::Visual;
+use crate::engine::base::world::World;
 
 pub trait Engine {
     fn setup(&mut self);

@@ -1,7 +1,7 @@
+use std::any::{Any, TypeId};
+use std::collections::hash_map::Iter;
 use std::collections::HashMap;
 use std::marker::PhantomData;
-use std::any::{TypeId, Any};
-use std::collections::hash_map::Iter;
 
 pub struct TypeMap {
     adj: HashMap<TypeId, Box<dyn Any>>,
@@ -24,7 +24,7 @@ impl TypeMap {
 
     pub fn get<T: Any>(&self) -> Option<&T> {
         match self.adj.get(&TypeId::of::<T>()) {
-            None => {None}
+            None => { None }
             Some(item) => {
                 item.downcast_ref::<T>()
             }
@@ -33,7 +33,7 @@ impl TypeMap {
 
     pub fn get_mut<T: Any>(&mut self) -> Option<&mut T> {
         match self.adj.get_mut(&TypeId::of::<T>()) {
-            None => {None}
+            None => { None }
             Some(item) => {
                 item.downcast_mut()
             }
@@ -61,7 +61,7 @@ impl TypeMap {
 mod kind_map_tests {
     use crate::engine::data::type_map::TypeMap;
 
-    fn create() -> TypeMap{
+    fn create() -> TypeMap {
         let mut i = TypeMap::new();
         i.add(145 as i32);
         i

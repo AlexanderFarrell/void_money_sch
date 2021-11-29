@@ -1,25 +1,20 @@
 use std::collections::HashMap;
 use std::hash::Hash;
+
 use crate::engine::data::id_map::IdMap;
 use crate::engine::data::type_map::TypeMap;
 
-pub trait Word {
-
-}
+pub trait Word {}
 
 pub enum Noun {
     None,
     Singular(i32),
-    Plural(Vec<i32>)
+    Plural(Vec<i32>),
 }
 
-pub trait Relation: State {
+pub trait Relation: State {}
 
-}
-
-pub trait State: Word {
-
-}
+pub trait State: Word {}
 
 pub struct Entity {
     is: TypeMap,

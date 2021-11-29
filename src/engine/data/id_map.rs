@@ -1,5 +1,5 @@
-use std::collections::HashMap;
 use std::collections::hash_map::Iter;
+use std::collections::HashMap;
 
 pub struct Counter {
     i: i32,
@@ -17,25 +17,25 @@ impl Counter {
         self.i.clone()
     }
 
-    pub fn next_removed(){
+    pub fn next_removed() {
         todo!()
     }
 }
 
 pub struct IdMap<T> {
     items: HashMap<i32, T>,
-    counter:  Counter
+    counter: Counter,
 }
 
 impl<T> IdMap<T> {
     pub fn new() -> Self {
         Self {
             items: HashMap::new(),
-            counter:  Counter::new(),
+            counter: Counter::new(),
         }
     }
 
-    pub fn add(&mut self, t: T) -> i32{
+    pub fn add(&mut self, t: T) -> i32 {
         let i = self.counter.next();
         self.items.insert(i.clone(), t);
         i
@@ -71,7 +71,7 @@ mod id_map_tests {
     use crate::engine::data::id_map::IdMap;
 
     #[test]
-    pub fn add_id_map(){
+    pub fn add_id_map() {
         let mut map = IdMap::new();
         let id = map.add(32);
         assert_eq!(map.borrow(&id).unwrap().clone(), 32)

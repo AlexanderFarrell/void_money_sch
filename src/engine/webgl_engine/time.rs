@@ -1,5 +1,6 @@
 use std::fmt::Display;
-use crate::engine::builtin_engines::webgl_engine;
+
+use crate::engine::webgl_engine;
 use crate::wasm_bindgen::__rt::core::fmt::Formatter;
 
 #[derive(Copy, Clone)]
@@ -21,18 +22,18 @@ pub enum Month {
 impl From<u64> for Month {
     fn from(i: u64) -> Self {
         match i {
-             1 => Month::January,
-             2 => Month::February,
-             3 => Month::March,
-             4 => Month::April,
-             5 => Month::May,
-             6 => Month::June,
-             7 => Month::July,
-             8 => Month::August,
-             9 => Month::September,
-             10 => Month::October,
-             11 => Month::November,
-             12 => Month::December,
+            1 => Month::January,
+            2 => Month::February,
+            3 => Month::March,
+            4 => Month::April,
+            5 => Month::May,
+            6 => Month::June,
+            7 => Month::July,
+            8 => Month::August,
+            9 => Month::September,
+            10 => Month::October,
+            11 => Month::November,
+            12 => Month::December,
             _ => panic!("Invalid Month: {}. Must be 1-12.", i)
         }
     }
@@ -84,7 +85,7 @@ pub enum DaysOfWeek {
     Thursday = 3,
     Friday = 4,
     Saturday = 5,
-    Sunday = 6
+    Sunday = 6,
 }
 
 impl From<u64> for DaysOfWeek {
@@ -325,7 +326,7 @@ fn current_month(milliseconds: u64) -> u64 {
             274..=304 => 10,
             305..=334 => 11,
             335..=365 => 12,
-            _ => {13}
+            _ => { 13 }
         }
     } else {
         match days_in_year {
@@ -341,10 +342,9 @@ fn current_month(milliseconds: u64) -> u64 {
             273..=303 => 10,
             304..=333 => 11,
             334..=364 => 12,
-            _ => {13}
+            _ => { 13 }
         }
     }
-
 }
 
 /*The Gregorian calendar consists of the following 12 months:
@@ -390,7 +390,7 @@ fn is_leap_year(year: u64) -> bool {
 
 
 mod time_test {
-    use crate::engine::builtin_engines::webgl_engine::time::{current_day_of_month, current_day_of_week, current_hour, current_month, current_year, hours, is_leap_year, milliseconds, minutes, seconds, WebDate};
+    use crate::engine::webgl_engine::time::{current_day_of_month, current_day_of_week, current_hour, current_month, current_year, hours, is_leap_year, milliseconds, minutes, seconds, WebDate};
 
     const TESTING_VAL: u64 = 1637736860927;
     //11/23/21 10:54pm or in other words 22:54pm

@@ -1,8 +1,8 @@
-use crate::engine::app::CoreComponent;
-use crate::engine::visual::{ClearInfo, Visual};
-use crate::engine::world::World;
-use crate::{JsValue, JsCast, WebGlRenderingContext, WebGlRenderingContext as GL};
-use crate::engine::builtin_engines::webgl_engine;
+use crate::{JsCast, JsValue, WebGlRenderingContext, WebGlRenderingContext as GL};
+use crate::engine::base::app::CoreComponent;
+use crate::engine::base::visual::{ClearInfo, Visual};
+use crate::engine::base::world::World;
+use crate::engine::webgl_engine;
 
 pub struct WebGLVisual {
     pub gl: WebGlRenderingContext,
@@ -24,15 +24,13 @@ impl WebGLVisual {
 
         Ok(WebGLVisual {
             gl,
-            clear_info
+            clear_info,
         })
     }
 }
 
 impl CoreComponent for WebGLVisual {
-    fn setup(&mut self) {
-
-    }
+    fn setup(&mut self) {}
 
     fn breakdown(&mut self) {
         todo!()
@@ -49,7 +47,7 @@ impl Visual for WebGLVisual {
             self.clear_info.color.red,
             self.clear_info.color.green,
             self.clear_info.color.blue,
-            self.clear_info.color.alpha
+            self.clear_info.color.alpha,
         );
         self.gl.clear_depth(self.clear_info.depth);
         self.gl.clear(GL::COLOR_BUFFER_BIT | GL::DEPTH_BUFFER_BIT);

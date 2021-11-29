@@ -1,11 +1,9 @@
+use crate::engine::base::app::{Game, Version};
+use crate::engine::base::engine::Engine;
+
 pub mod econ;
 
-use crate::engine::app::{Game, Version};
-use crate::engine::engine::Engine;
-
-pub struct VoidMoney {
-
-}
+pub struct VoidMoney {}
 
 impl VoidMoney {
     pub fn new() -> Self {
@@ -14,17 +12,11 @@ impl VoidMoney {
 }
 
 impl Game for VoidMoney {
-    fn setup(&mut self, engine: &mut dyn Engine) {
+    fn setup(&mut self, engine: &mut dyn Engine) {}
 
-    }
+    fn update(&mut self, engine: &mut dyn Engine) {}
 
-    fn update(&mut self, engine: &mut dyn Engine) {
-
-    }
-
-    fn breakdown(&mut self, engine: &mut dyn Engine) {
-
-    }
+    fn breakdown(&mut self, engine: &mut dyn Engine) {}
 
     fn name(&self) -> String {
         todo!()
