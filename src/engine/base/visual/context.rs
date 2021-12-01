@@ -1,6 +1,28 @@
 use crate::engine::base::app::{CoreComponent, Source};
 use crate::engine::base::visual::ClearInfo;
 
+pub struct ShaderNew {
+
+}
+
+impl ShaderNew {
+    pub fn create(context: &impl Context, source: Vec<ShaderType, Source>) {
+        
+    }
+
+    pub fn delete(context: &impl Context) {
+
+    }
+    
+    pub fn uniform_location(context: &impl Context) -> u32 {
+
+    }
+
+    pub fn attribute_location(context: &impl Context) -> u32 {
+
+    }
+}
+
 pub trait Shader<T: Context, UniLoc, AttrLoc>: Drop + Bindable<T> {
     fn create(context: &T, source: Vec<ShaderTypes, Source>) -> Result<Self, String>;
     fn delete();
